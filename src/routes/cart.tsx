@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
-import { getProduct, inr } from "@/lib/products";
+import { inr } from "@/lib/products";
+import { useCatalog } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 
 export const Route = createFileRoute("/cart")({
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, setQty, remove, subtotal, count } = useCart();
+  const { getProduct } = useCatalog();
   const shipping = subtotal >= 499 || subtotal === 0 ? 0 : 49;
 
   if (!items.length)

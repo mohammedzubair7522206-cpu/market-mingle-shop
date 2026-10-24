@@ -1,13 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { deliveryDate, discount, getCategory, getProduct, inr, products } from "@/lib/products";
+import { deliveryDate, discount, inr } from "@/lib/products";
+import { catalogQuery, useCatalog } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 import { ProductCard, Stars } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/product/$slug")({
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
+  loader: async ({ params, context }) => {
+    const product = (await context.queryClient.ensureQueryData(catalogQuery)).products.find((p) => p.slug === params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -25,7 +26,9 @@ export const Route = createFileRoute("/product/$slug")({
 });
 
 function ProductPage() {
-  const { product: p } = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const { products, getCategory, getProduct } = useCatalog();
+  const p = getProduct(slug) ?? Route.useLoaderData().product;
   const { add } = useCart();
   const nav = useNavigate();
   const [variant, setVariant] = useState(p.variants?.options[0]);
