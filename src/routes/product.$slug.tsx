@@ -28,7 +28,7 @@ export const Route = createFileRoute("/product/$slug")({
 function ProductPage() {
   const { slug } = Route.useParams();
   const { products, getCategory, getProduct } = useCatalog();
-  const p = getProduct(slug) ?? Route.useLoaderData().product;
+  const p = getProduct(slug)!;
   const { add } = useCart();
   const nav = useNavigate();
   const [variant, setVariant] = useState(p.variants?.options[0]);

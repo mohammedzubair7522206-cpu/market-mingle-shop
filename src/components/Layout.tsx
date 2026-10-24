@@ -9,7 +9,7 @@ export const BRAND = "Bazaaro";
 
 export function Header() {
   const { count } = useCart();
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const categories = useCatalogMaybe()?.categories ?? [];
   const nav = useNavigate();
   const [q, setQ] = useState("");
@@ -33,7 +33,6 @@ export function Header() {
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products, brands and more" className="flex-1 bg-transparent px-4 py-2 text-sm text-foreground outline-none" />
             <button aria-label="Search" className="bg-primary px-4 text-primary-foreground"><Search className="h-4 w-4" /></button>
           </form>
-          {isAdmin && <Link to="/admin" className="hidden text-sm font-semibold sm:block">Admin</Link>}
           <Link to={user ? "/account" : "/auth"} className="hidden items-center gap-1 text-sm font-semibold sm:flex"><User className="h-4 w-4" /> {user ? "Account" : "Sign in"}</Link>
           <Link to="/cart" className="relative flex items-center gap-1 text-sm font-semibold">
             <ShoppingCart className="h-6 w-6" />
