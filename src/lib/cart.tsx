@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { getProduct } from "./products";
 
-export type CartItem = { slug: string; variant?: string; qty: number };
+export type CartItem = { slug: string; variant?: string | undefined; qty: number };
 type Ctx = {
   items: CartItem[];
   add: (slug: string, qty?: number, variant?: string) => void;

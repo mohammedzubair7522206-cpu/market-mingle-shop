@@ -25,7 +25,7 @@ export function Header() {
           </div>
           <form
             className="flex flex-1 overflow-hidden rounded-full bg-background"
-            onSubmit={(e) => { e.preventDefault(); nav({ to: "/products", search: { q: q || undefined } }); }}
+            onSubmit={(e) => { e.preventDefault(); nav({ to: "/products", search: q ? { q } : {} }); }}
           >
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products, brands and more" className="flex-1 bg-transparent px-4 py-2 text-sm text-foreground outline-none" />
             <button aria-label="Search" className="bg-primary px-4 text-primary-foreground"><Search className="h-4 w-4" /></button>
