@@ -1,4 +1,5 @@
-import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 import { getCatalog, type CatalogRow } from "./catalog.functions";
 import { resolveImage, type Category, type Product } from "./products";
 
@@ -31,10 +32,17 @@ function build(raw: CatalogRow): Catalog {
 export const catalogQuery = queryOptions({
   queryKey: ["catalog"],
   queryFn: () => getCatalog(),
-  select: build,
   staleTime: 60_000,
 });
 
-export const useCatalog = () => useSuspenseQuery(catalogQuery).data;
-/** Non-suspending variant for providers mounted above route boundaries. */
-export const useCatalogMaybe = () => useQuery(catalogQuery).data;
+// The root route loader fetches the catalog (server-rendered and sent to the browser),
+// so every page and the header read the same snapshot without a hydration mismatch.
+const rootApi = getRouteApi("__root__");
+const cache = new WeakMap<CatalogRow, Catalog>();
+export const useCatalog = (): Catalog => {
+  const raw = rootApi.useLoaderData() as CatalogRow;
+  let c = cache.get(raw);
+  if (!c) { c = build(raw); cache.set(raw, c); }
+  return c;
+};
+export const useCatalogMaybe = useCatalog;
