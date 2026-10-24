@@ -1,13 +1,16 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { MapPin, Search, ShoppingCart, User } from "lucide-react";
 import { useState } from "react";
-import { categories } from "@/lib/products";
+import { useCatalogMaybe } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 
 export const BRAND = "Bazaaro";
 
 export function Header() {
   const { count } = useCart();
+  const { user } = useAuth();
+  const categories = useCatalogMaybe()?.categories ?? [];
   const nav = useNavigate();
   const [q, setQ] = useState("");
   return (
@@ -30,7 +33,7 @@ export function Header() {
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products, brands and more" className="flex-1 bg-transparent px-4 py-2 text-sm text-foreground outline-none" />
             <button aria-label="Search" className="bg-primary px-4 text-primary-foreground"><Search className="h-4 w-4" /></button>
           </form>
-          <span className="hidden items-center gap-1 text-sm font-semibold sm:flex"><User className="h-4 w-4" /> Account</span>
+          <Link to={user ? "/account" : "/auth"} className="hidden items-center gap-1 text-sm font-semibold sm:flex"><User className="h-4 w-4" /> {user ? "Account" : "Sign in"}</Link>
           <Link to="/cart" className="relative flex items-center gap-1 text-sm font-semibold">
             <ShoppingCart className="h-6 w-6" />
             <span className="absolute -right-2 -top-2 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">{count}</span>
@@ -51,6 +54,7 @@ export function Header() {
 }
 
 export function Footer() {
+  const categories = useCatalogMaybe()?.categories ?? [];
   return (
     <footer className="mt-16 bg-nav text-nav-foreground">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">

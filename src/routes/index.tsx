@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import hero from "@/assets/hero.jpg";
-import { categories, discount, products } from "@/lib/products";
+import { discount, type Product } from "@/lib/products";
+import { useCatalog } from "@/lib/catalog";
 import { ProductCard } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/")({
@@ -29,11 +30,12 @@ function Section({ title, children, to }: { title: string; children: React.React
   );
 }
 
-const Grid = ({ list }: { list: typeof products }) => (
+const Grid = ({ list }: { list: Product[] }) => (
   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">{list.map((p) => <ProductCard key={p.slug} p={p} />)}</div>
 );
 
 function Index() {
+  const { categories, products } = useCatalog();
   const best = [...products].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
   const deals = [...products].sort((a, b) => discount(b) - discount(a)).slice(0, 4);
   const fresh = products.filter((p) => p.isNew);
@@ -52,10 +54,10 @@ function Index() {
       <section className="mx-auto -mt-10 max-w-7xl px-4 relative">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {categories.map((c) => {
-            const p = products.find((x) => x.category === c.slug)!;
+            const p = products.find((x) => x.category === c.slug);
             return (
               <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} className="rounded-xl bg-background p-3 text-center shadow-card transition hover:-translate-y-0.5">
-                <img src={p.image} alt={c.name} loading="lazy" className="mx-auto aspect-square w-full rounded-lg bg-muted object-cover" />
+                <img src={p?.image} alt={c.name} loading="lazy" className="mx-auto aspect-square w-full rounded-lg bg-muted object-cover" />
                 <p className="mt-2 text-sm font-bold">{c.name}</p>
               </Link>
             );

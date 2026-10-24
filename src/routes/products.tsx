@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { categories, products } from "@/lib/products";
+import { useCatalog } from "@/lib/catalog";
 import { Listing } from "@/components/Listing";
 
 export const Route = createFileRoute("/products")({
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/products")({
 
 function ProductsPage() {
   const { q } = Route.useSearch();
+  const { categories, products } = useCatalog();
   const term = q?.toLowerCase().trim();
   const list = term
     ? products.filter((p) => [p.name, p.brand, p.description, categories.find((c) => c.slug === p.category)?.name].join(" ").toLowerCase().includes(term))

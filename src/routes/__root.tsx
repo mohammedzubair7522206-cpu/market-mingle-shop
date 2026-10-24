@@ -13,6 +13,9 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart";
+import { AuthProvider } from "../lib/auth";
+import { catalogQuery } from "../lib/catalog";
+import { Toaster } from "../components/ui/sonner";
 import { Header, Footer } from "../components/Layout";
 
 function NotFoundComponent() {
@@ -92,6 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQuery),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -117,13 +121,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <CartProvider>
         <Header />
         <main className="min-h-[60vh] bg-secondary">
           <Outlet />
         </main>
         <Footer />
+        <Toaster />
       </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
