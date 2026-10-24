@@ -3,7 +3,10 @@ import { categories, products } from "@/lib/products";
 import { Listing } from "@/components/Listing";
 
 export const Route = createFileRoute("/products")({
-  validateSearch: (s: Record<string, unknown>): { q?: string } => ({ q: typeof s.q === "string" && s.q ? s.q : undefined }),
+  validateSearch: (s: Record<string, unknown>): { q?: string } => {
+    const q = s["q"];
+    return typeof q === "string" && q ? { q } : {};
+  },
   head: () => ({
     meta: [
       { title: "All Products — Bazaaro" },
