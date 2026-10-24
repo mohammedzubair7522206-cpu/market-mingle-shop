@@ -41,21 +41,21 @@ function AccountPage() {
 
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone && !PHONE.test(phone)) return toast.error("Enter a valid 10-digit mobile number");
+    if (phone && !PHONE.test(phone)) { toast.error("Enter a valid 10-digit mobile number"); return; }
     const { error } = await supabase.from("profiles").update({ full_name: name.trim(), phone: phone || null }).eq("id", user.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Profile saved");
     qc.invalidateQueries({ queryKey: ["profile", user.id] });
   };
 
   const saveAddr = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!PIN.test(addr.pincode)) return toast.error("Enter a valid 6-digit PIN code");
-    if (!PHONE.test(addr.phone)) return toast.error("Enter a valid 10-digit mobile number");
+    if (!PIN.test(addr.pincode)) { toast.error("Enter a valid 6-digit PIN code"); return; }
+    if (!PHONE.test(addr.phone)) { toast.error("Enter a valid 10-digit mobile number"); return; }
     const first = (addresses.data?.length ?? 0) === 0;
     if (addr.is_default || first) await supabase.from("addresses").update({ is_default: false }).eq("user_id", user.id);
     const { error } = await supabase.from("addresses").insert({ ...addr, line2: addr.line2 || null, is_default: addr.is_default || first, user_id: user.id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setAddr(emptyAddr); setAdding(false);
     qc.invalidateQueries({ queryKey: ["addresses", user.id] });
   };
