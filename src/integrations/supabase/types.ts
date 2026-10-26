@@ -56,6 +56,42 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_allowlist: {
+        Row: {
+          created_at: string
+          email: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+        }
+        Relationships: []
+      }
+      brands: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string
@@ -231,6 +267,7 @@ export type Database = {
           is_active: boolean
           is_demo: boolean
           is_new: boolean
+          low_stock_threshold: number
           mrp: number
           name: string
           price: number
@@ -254,6 +291,7 @@ export type Database = {
           is_active?: boolean
           is_demo?: boolean
           is_new?: boolean
+          low_stock_threshold?: number
           mrp: number
           name: string
           price: number
@@ -277,6 +315,7 @@ export type Database = {
           is_active?: boolean
           is_demo?: boolean
           is_new?: boolean
+          low_stock_threshold?: number
           mrp?: number
           name?: string
           price?: number
@@ -376,6 +415,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

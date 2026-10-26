@@ -8,6 +8,20 @@
       "when": 1792854074285,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793012819169,
+      "tag": "0001_admin_dashboard",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793012850425,
+      "tag": "0002_product_images_policies",
+      "breakpoints": true
     }
   ]
 }
